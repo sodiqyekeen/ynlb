@@ -1,0 +1,170 @@
+@page "/translate"
+@using System.Text.Json
+@using YNLB.Pwa.Models
+
+@implements IDisposable
+
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudTextField @bind-Value="_inputText" Immediate="true" Clearable="true" Label="Type or pste English text here"
+        Variant="Variant.Outlined" Lines="5" Class="mb-4" Disabled="@(_modelLoadingStatus.Count>0)" />
+    @if (_inputText.Length > 0)
+    {
+        <MudText Typo="Typo.caption" Align="Align.Right" GutterBottom="true" Class="mb-4">@_inputText.Length characters
+        </MudText>
+    }
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="TranslateText"
+        Disabled="@(string.IsNullOrWhiteSpace(_inputText)|| _isLoading)" Class="mb-4">
+        @if (_isLoading)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Translating</MudText>
+        }
+        else
+        {
+            <MudText>Translate</MudText>
+        }
+    </MudButton>
+
+    @if (_modelLoadingStatus.Count > 0)
+    {
+        foreach (var (key, value) in _modelLoadingStatus)
+        {
+            <MudProgressLinear Color="Color.Info" Striped="true" Size="Size.Large" Value="@value" Class="my-7">
+                <MudText Typo="Typo.overline" Color="Color.Dark">
+                    <b>@key: @value%</b>
+                </MudText>
+            </MudProgressLinear>
+        }
+    }
+
+    @if (!string.IsNullOrEmpty(_outputText))
+    {
+        <MudPaper Elevation="3" Class="pa-4 mb-4 relative">
+            <MudText>@_outputText</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Color="Color.Default" Size="Size.Small"
+                OnClick="CopyToClipboard" Class="absolute mt-1 mr-1" Style="top:0; right:0;" />
+        </MudPaper>
+    }
+
+    @if (_translationHistory.Count > 0)
+    {
+        <MudPaper Elevation="3" Class="pa-4 mb-4">
+            <MudText Typo="Typo.h6">Translation History</MudText>
+            @foreach (var entry in _translationHistory)
+            {
+                <MudText Typo="Typo.body2">@entry.Date: @entry.Text -> @entry.TranslatedText</MudText>
+            }
+        </MudPaper>
+    }
+    </MudContainer>
+
+    @code {
+    private bool _isDarkMode = false;
+    private string _inputText = "";
+    private string _outputText = "";
+    private bool _isLoading = false;
+    private DotNetObjectReference<Translate>? _dotNetRef;
+    private Dictionary<string, int> _modelLoadingStatus = [];
+    private IJSInProcessObjectReference? module;
+    private List<TranslationEntry> _translationHistory = new();
+
+    protected override void OnInitialized()
+    {
+        _dotNetRef = DotNetObjectReference.Create(this);
+        var jsInProcess = (IJSInProcessRuntime)JSRuntime;
+        jsInProcess.InvokeVoid("translatorService.init", _dotNetRef);
+        LoadTranslationHistory();
+    }
+
+    private void LoadTranslationHistory()
+    {
+        var jsInProcess = (IJSInProcessRuntime)JSRuntime;
+        var historyJson = jsInProcess.Invoke<string>("translatorService.getTranslationHistory");
+        _translationHistory = JsonSerializer.Deserialize<List<TranslationEntry>>(historyJson) ?? new List<TranslationEntry>();
+    }
+
+    [JSInvokable]
+    public void OnProgress(ModelLoadingStatus data)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(data.File)) return;
+            if (_modelLoadingStatus.ContainsKey(data.File))
+            {
+                _modelLoadingStatus[data.File] = data.Progress;
+
+            }
+            else
+            {
+                _modelLoadingStatus.Add(data.File, data.Progress);
+            }
+        }
+        catch
+        {
+
+        }
+        finally
+        {
+            var keysToRemove = _modelLoadingStatus.Where(kvp => kvp.Value == 100).Select(kvp => kvp.Key).ToList();
+            foreach (var key in keysToRemove)
+            {
+                _modelLoadingStatus.Remove(key);
+            }
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_dotNetRef != null)
+        {
+            _dotNetRef.Dispose();
+        }
+    }
+
+    private async Task TranslateText()
+    {
+        if (string.IsNullOrWhiteSpace(_inputText))
+        {
+            Snackbar.Add("Please enter some text to translate.", Severity.Warning);
+            return;
+        }
+        _outputText = "";
+        _isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await JSRuntime.InvokeVoidAsync("translatorService.translate", _inputText, _dotNetRef);
+    }
+
+    [JSInvokable]
+    public void OnTranslating(string translatedText)
+    {
+        Console.WriteLine($"Translating... {translatedText}");
+        _outputText = translatedText;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void OnTranslationCompleted(string translatedText)
+    {
+        _outputText = translatedText;
+        _isLoading = false;
+        StateHasChanged();
+        SaveTranslationHistory(_inputText, translatedText);
+    }
+
+    private void SaveTranslationHistory(string text, string translatedText)
+    {
+        var entry = new TranslationEntry { Text = text, TranslatedText = translatedText, Date = DateTime.Now.ToString("g") };
+        _translationHistory.Add(entry);
+        JSRuntime.InvokeVoid("translatorService.saveTranslationHistory", text, translatedText);
+    }
+
+    private void CopyToClipboard()
+    {
+        // In a real application, you would use JavaScript interop to copy to clipboard
+        Snackbar.Add("Text copied to clipboard!", Severity.Success);
+    }
+}

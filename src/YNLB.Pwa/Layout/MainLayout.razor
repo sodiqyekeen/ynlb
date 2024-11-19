@@ -1,0 +1,101 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="_theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Color="Color.Primary">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h4" Class="ml-3 gradient-text">YNLB</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
+            Link="https://github.com/yourusername/ynlb" Target="_blank" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">YNLB</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4 pt-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
+    <MudAppBar Bottom="true" Elevation="1">
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudGrid Justify="Justify.SpaceBetween" Spacing="2">
+                <MudItem>
+                    <MudText Typo="Typo.body2">&copy; 2023 YNLB. All rights reserved.</MudText>
+                </MudItem>
+                <MudItem>
+                    <MudStack Row="true" Spacing="2">
+                        <MudLink Href="/about" Color="Color.Inherit">About</MudLink>
+                        <MudLink Href="/privacy" Color="Color.Inherit">Privacy</MudLink>
+                        <MudLink Href="/terms" Color="Color.Inherit">Terms</MudLink>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudAppBar>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private bool _isDarkMode = false;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += LocationChanged!;
+    }
+
+    private void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        @* _drawerOpen = false; *@
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= LocationChanged!;
+    }
+
+    private MudTheme _theme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = "#1A365D",
+                Secondary = "#FF7F50",
+                Tertiary = "#FFD700",
+                Background = "#FFFFF0",
+                AppbarBackground = "#1A365D",
+                DrawerBackground = "#FFFFF0",
+                DrawerText = "rgba(0,0,0, 0.7)",
+                Success = "#66BB6A"
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = "#1A365D",
+                Secondary = "#FF7F50",
+                Tertiary = "#FFD700",
+                Background = "#121212",
+                AppbarBackground = "#1A365D",
+                DrawerBackground = "#1E1E1E",
+                DrawerText = "rgba(255,255,255, 0.50)",
+                Surface = "#1E1E1E",
+                Success = "#66BB6A"
+            }
+
+        };
+}

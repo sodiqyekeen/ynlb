@@ -1,0 +1,58 @@
+﻿@page "/"
+
+<PageTitle>YNLB - Home</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Welcome to YNLB</MudText>
+
+<MudPaper Class="pa-4" Elevation="3">
+    <MudText Typo="Typo.h5" GutterBottom="true">Yoruba Not Left Behind</MudText>
+    <MudText>YNLB is an AI-powered Yoruba translation platform, bridging cultures through technology.</MudText>
+</MudPaper>
+
+<MudGrid Class="mt-4">
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Translate</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>Translate English to Yoruba with our advanced AI.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/translate">Go to Translate</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Offline Mode</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>Access translations even without an internet connection.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/offline">Learn More</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">About Us</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>Learn more about our mission and team.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/about">About YNLB</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
