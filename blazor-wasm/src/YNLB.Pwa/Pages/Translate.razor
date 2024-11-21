@@ -157,9 +157,11 @@
 
     private void SaveTranslationHistory(string text, string translatedText)
     {
+
         var entry = new TranslationEntry { Text = text, TranslatedText = translatedText, Date = DateTime.Now.ToString("g") };
         _translationHistory.Add(entry);
-        JSRuntime.InvokeVoid("translatorService.saveTranslationHistory", text, translatedText);
+        var jsInProcess = (IJSInProcessRuntime)JSRuntime;
+        jsInProcess.InvokeVoid("translatorService.saveTranslationHistory", text, translatedText);
     }
 
     private void CopyToClipboard()
