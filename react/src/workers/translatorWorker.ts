@@ -8,13 +8,11 @@ class TranslationPipeline {
         if (this.instance === null) {
             this.instance = pipeline('translation', 'Xenova/nllb-200-distilled-600M', { progress_callback });
         }
-
         return this.instance;
     }
 }
 
 self.addEventListener('message', async (event) => {
-    console.log('Message received from main thread:', event.data);
     const instance = await TranslationPipeline.getInstance((progress: { status: string; name: string; file: string; progress: any; }) => {
         const modelLoadingStatus = {
             file: progress.file,
