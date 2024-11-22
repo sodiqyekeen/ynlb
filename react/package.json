@@ -1,10 +1,12 @@
 {
   "name": "react",
   "version": "1.0.0",
+  "homepage": "https://sodiqyekeen.github.io/ynlb",
   "scripts": {
     "start": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "vite build --mode gh-pages && node 404.js",
+    "serve": "vite preview",
+    "deploy:gh": "vite build --mode gh-pages && node 404.js && gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +32,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
+    "gh-pages": "^6.2.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "vite": "^5.4.11",

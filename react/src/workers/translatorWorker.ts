@@ -31,7 +31,6 @@ self.addEventListener('message', async (event) => {
             self.postMessage({ type: 'translating', data: translatedText });
         }
     });
-    console.log(result);
     self.postMessage({ type: 'completed', data: result[0].translation_text });
 });
 

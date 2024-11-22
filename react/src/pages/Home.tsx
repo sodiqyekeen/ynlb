@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Copy, Loader2 } from 'lucide-react'
+import { Copy, Loader2, XCircle } from 'lucide-react'
 import { Button } from "../components/ui/button"
 import { Textarea } from "../components/ui/textarea"
 import { ScrollArea } from "../components/ui/scroll-area"
@@ -85,16 +85,32 @@ export default function TranslatePage() {
         })
     }
 
+    const clearInputText = () => {
+        setInputText('');
+    }
+
     return (
         <ScrollArea className="h-full">
             <section className="space-y-4">
                 <h2 className="text-xl font-semibold text-gray-800">English to Yoruba Translation</h2>
-                <Textarea
-                    placeholder="Enter English text here"
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    className="w-full min-h-[120px] bg-white border-gray-300 focus:border-purple-500 focus:ring-purple-500"
-                />
+                <div className="relative">
+                    <Textarea
+                        placeholder="Enter English text here"
+                        value={inputText}
+                        onChange={(e) => setInputText(e.target.value)}
+                        className="w-full min-h-[120px] bg-white border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                    />
+                    {inputText && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-1/2 right-2 transform -translate-y-1/2"
+                            onClick={clearInputText}
+                        >
+                            <XCircle className="h-4 w-4" />
+                        </Button>
+                    )}
+                </div>
                 <Button
                     onClick={handleTranslate}
                     className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
