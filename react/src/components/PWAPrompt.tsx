@@ -35,7 +35,7 @@ export function PWAPrompt() {
     if (!showPrompt) return null
 
     return (
-        <div className="fixed top-4 left-4 right-4 bg-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50">
+        <div className="fixed top-4 left-4 right-4 bg-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50 max-w-xl mx-auto md:w-full">
             <p className="text-gray-800 mr-4">Install YNLB for a better experience!</p>
             <div className="flex space-x-2">
                 <Button onClick={() => setShowPrompt(false)} variant="outline">

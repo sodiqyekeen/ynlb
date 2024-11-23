@@ -12,7 +12,6 @@ const htmlPlugin = (base) => {
     };
 };
 
-
 export default defineConfig(({ command, mode }) => {
     const base = mode === 'gh-pages' ? '/ynlb/' : '/';
     return {
@@ -69,10 +68,8 @@ export default defineConfig(({ command, mode }) => {
                             type: 'image/png',
                             label: 'YNLB Mobile View'
                         }
-
                     ]
                 }
-
             }),
         ],
         server: {

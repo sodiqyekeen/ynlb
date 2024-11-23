@@ -11,7 +11,7 @@ export default function Contact() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-4xl mx-auto md:w-full">
             <h2 className="text-2xl font-bold text-gray-800">Contact Us</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
