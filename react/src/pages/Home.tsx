@@ -126,12 +126,8 @@ export default function TranslatePage() {
     }
 
     const handleItemSelected = (id: string) => {
-        console.log("Selected item", id);
         const item = history.find(item => item.id === id);
-        console.log("Item", item);
         if (item) {
-            console.log("English", item.english);
-            console.log("Yoruba", item.yoruba);
             setInputText(item.english);
             setOutputText(item.yoruba);
         }
