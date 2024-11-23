@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import NavMenu from './nav-menu'
+import NavMenu from './NavMenu'
 
 export default function Layout() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -14,7 +14,7 @@ export default function Layout() {
                 <NavMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
             </header>
 
-            <main className="flex-grow p-4 md:p-6 max-w-3xl mx-auto w-full">
+            <main className="flex-grow p-4 md:p-6 max-w-6xl mx-auto w-full">
                 <Outlet />
             </main>
 

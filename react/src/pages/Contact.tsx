@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Textarea } from "../components/ui/textarea"
+import { Button } from "../components/ui/Button"
+import { Input } from "../components/ui/Input"
+import { Textarea } from "../components/ui/TextArea"
 
 export default function Contact() {
     const handleSubmit = (e: React.FormEvent) => {

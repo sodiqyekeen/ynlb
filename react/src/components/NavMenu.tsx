@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Button } from "./ui/Button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/Sheet";
 import { Link } from 'react-router-dom';
 
 interface NavMenuProps {
