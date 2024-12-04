@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { ScrollArea } from "./ui/ScrollArea"
 import { Button } from "./ui/Button"
-import { Trash2, XCircle } from 'lucide-react'
+import { Trash2, XCircle, Download } from 'lucide-react'
+import ExcelJS from 'exceljs'
+
 
 export interface TranslationItem {
     id: string
@@ -49,28 +51,65 @@ export function TranslationHistory({ history, onDeleteItem, onClearAll, onSelect
         }
     }, [])
 
+    const handleExport = async () => {
+        const workbook = new ExcelJS.Workbook()
+        const worksheet = workbook.addWorksheet('Translation History')
+
+        worksheet.columns = [
+            { header: 'English', key: 'english', width: 50 },
+            { header: 'Yoruba', key: 'yoruba', width: 50 },
+        ]
+
+        history.forEach(item => {
+            worksheet.addRow({
+                english: item.english,
+                yoruba: item.yoruba,
+            })
+        })
+
+        const buffer = await workbook.xlsx.writeBuffer()
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'translation_history.xlsx'
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+
     return (
-        <div className="w-full lg:w-96 lg:fixed lg:right-4 lg:top-20 lg:bottom-4 lg:overflow-hidden  p-4 rounded-lg shadow-sm">
+        <div className="w-full md:w-96 md:fixed md:right-4 md:top-20 md:bottom-4 md:overflow-hidden  p-4 rounded-lg shadow-sm">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">History</h2>
-                <Button
-                    onClick={onClearAll}
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 border-red-600 hover:bg-red-50"
-                >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Clear All
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        onClick={handleExport}
+                        variant="outline"
+                        size="sm"
+                        className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                    >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export
+                    </Button>
+                    <Button
+                        onClick={onClearAll}
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600 border-red-600 hover:bg-red-50"
+                    >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Clear All
+                    </Button>
+                </div>
             </div>
             <div className="relative">
                 <div className="top-fade absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none opacity-0 transition-opacity duration-300"></div>
-                <ScrollArea className="h-[calc(100vh-16rem)] lg:h-[calc(100vh-12rem)]" ref={scrollRef}>
+                <ScrollArea className="h-[calc(100vh-16rem)] md:h-[calc(100vh-12rem)]" ref={scrollRef}>
                     {
                         history.map((item) => (
                             <div
                                 key={item.id}
-                                className="mb-4 p-3 bg-gray-50 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200 w-[326px] lg:w-[350px]"
+                                className="mb-4 p-3 bg-gray-50 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200 lg:max-w-3xs md:max-w-xs sm:max-w-2xl max-w-xs"
                                 onClick={() => onSelectItem(item.id)}
                             >
                                 <div className="flex justify-between items-start gap-2">

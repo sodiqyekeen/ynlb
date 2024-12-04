@@ -9,6 +9,14 @@ interface NavMenuProps {
   setIsMenuOpen: (isOpen: boolean) => void;
 }
 
+const NavMenuLink: React.FC<{ to: string; onClick: () => void; label: string }> = ({ to, onClick, label }) => (
+  <Link to={to} onClick={onClick}>
+    <Button variant="ghost" className="w-full justify-start mb-2">
+      {label}
+    </Button>
+  </Link>
+);
+
 const NavMenu: React.FC<NavMenuProps> = ({ isMenuOpen, setIsMenuOpen }) => {
   return (
     <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -22,21 +30,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ isMenuOpen, setIsMenuOpen }) => {
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
         <nav className="mt-6">
-          <Link to="/" onClick={() => setIsMenuOpen(false)}>
-            <Button variant="ghost" className="w-full justify-start mb-2">
-              Home
-            </Button>
-          </Link>
-          <Link to="/about" onClick={() => setIsMenuOpen(false)}>
-            <Button variant="ghost" className="w-full justify-start mb-2">
-              About YNLB
-            </Button>
-          </Link>
-          <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
-            <Button variant="ghost" className="w-full justify-start mb-2">
-              Contact Us
-            </Button>
-          </Link>
+          <NavMenuLink to="/" onClick={() => setIsMenuOpen(false)} label="Home" />
+          <NavMenuLink to="/bulk-translation" onClick={() => setIsMenuOpen(false)} label="Bulk Translation" />
+          {/* <NavMenuLink to="/editor" onClick={() => setIsMenuOpen(false)} label="Yoruba Text Editor" /> */}
+          <NavMenuLink to="/about" onClick={() => setIsMenuOpen(false)} label="About YNLB" />
+          <NavMenuLink to="/contact" onClick={() => setIsMenuOpen(false)} label="Contact Us" />
         </nav>
       </SheetContent>
     </Sheet>

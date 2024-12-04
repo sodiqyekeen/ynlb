@@ -5,9 +5,11 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
-import { useToast } from "./components/useToast";
+import { useToast } from "./components/useToast"
 import { PWAPrompt } from './components/PWAPrompt'
-
+import { ShareTarget } from './components/ShareTarget'
+import BulkTranslation from './pages/BulkTranslation'
+import YorubaTextEditor from './components/YorubaTextEditor'
 
 const basename = import.meta.env.BASE_URL || '/';
 
@@ -51,6 +53,9 @@ function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="/share-target" element={<ShareTarget />} />
+            <Route path="bulk-translation" element={<BulkTranslation />} />
+            <Route path="editor" element={<YorubaTextEditor />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

@@ -68,7 +68,16 @@ export default defineConfig(({ command, mode }) => {
                             type: 'image/png',
                             label: 'YNLB Mobile View'
                         }
-                    ]
+                    ],
+                    share_target: {
+                        action: '/share-target/',
+                        method: 'GET',
+                        params: {
+                            title: 'title',
+                            text: 'text',
+                            url: 'url'
+                        }
+                    }
                 }
             }),
         ],

@@ -20,18 +20,14 @@ self.addEventListener('message', async (event) => {
         };
         self.postMessage({ type: progress.status, data: modelLoadingStatus });
     });
-    const result = await instance(event.data, {
+    const result = await instance(event.data.text, {
         src_lang: 'eng_Latn',
         tgt_lang: 'yor_Latn',
         config: {
             max_length: 1000,
-        },
-        callback_function: (x: any) => {
-            const translatedText = instance.tokenizer.decode(x[0].output_token_ids, { skip_special_tokens: true });
-            self.postMessage({ type: 'translating', data: translatedText });
         }
     });
-    self.postMessage({ type: 'completed', data: result[0].translation_text });
+    self.postMessage({ type: 'completed', data: result[0].translation_text, index: event.data.index });
 });
 
 self.addEventListener('error', (error) => {

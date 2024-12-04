@@ -7,6 +7,7 @@ import { useToast } from "../components/useToast";
 import { Progress } from '@/components/ui/Progress';
 import { TranslationItem, TranslationHistory } from '@/components/TranslationHistory';
 import { v4 as uuid } from 'uuid';
+import { useLocation } from 'react-router-dom';
 
 export default function TranslatePage() {
     const [inputText, setInputText] = useState<string>('')
@@ -18,6 +19,14 @@ export default function TranslatePage() {
 
     const worker = useRef<Worker | null>(null);
     const inputTextRef = useRef<string>('');
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state && location.state.sharedText) {
+            setInputText(location.state.sharedText as string)
+            handleTranslate();
+        }
+    }, [location]);
 
     useEffect(() => {
         const savedHistory = localStorage.getItem('translationHistory')
@@ -25,7 +34,6 @@ export default function TranslatePage() {
             setHistory(JSON.parse(savedHistory))
         }
     }, []);
-
 
     useEffect(() => {
         localStorage.setItem('translationHistory', JSON.stringify(history))
@@ -60,7 +68,6 @@ export default function TranslatePage() {
                 case 'completed':
                     setOutputText(data);
                     setIsLoading(false);
-                    console.log("Input Text", inputTextRef.current);
                     const newItem: TranslationItem = {
                         id: uuid(),
                         english: inputTextRef.current,
@@ -93,7 +100,7 @@ export default function TranslatePage() {
         setIsLoading(true)
         setOutputText('')
         try {
-            worker.current?.postMessage(inputText);
+            worker.current?.postMessage({ text: inputText });
         } catch (error) {
             toast({
                 title: "Translation Error",
@@ -133,10 +140,9 @@ export default function TranslatePage() {
         }
     };
 
-
     return (
-        <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-grow lg:max-w-[calc(100%-25rem)]">
+        <div className="flex flex-col md:flex-row md:space-x-4">
+            <div className="flex-grow md:max-w-[calc(100%-25rem)]">
                 <ScrollArea className="h-full">
                     <section className="space-y-4">
                         <h2 className="text-xl font-semibold text-gray-800">English to Yoruba Translation</h2>
@@ -172,6 +178,7 @@ export default function TranslatePage() {
                                 'Translate'
                             )}
                         </Button>
+
                         {progressItems.length > 0 && (
                             <div className="mt-4">
                                 <h3 className="text-lg font-semibold mb-2 text-gray-800">Model Loading</h3>
