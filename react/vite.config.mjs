@@ -28,8 +28,8 @@ export default defineConfig(({ command, mode }) => {
                 },
                 manifest: {
                     short_name: 'YNLB',
-                    name: 'YNLB - Yoruba Not Left Behind',
-                    description: 'English to Yoruba translation app',
+                    name: 'YNLB - Yorùbá Not Left Behind',
+                    description: 'English to Yorùbá translation app',
                     icons: [
                         {
                             src: 'ynlb192.png',

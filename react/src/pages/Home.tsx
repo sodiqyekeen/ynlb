@@ -145,7 +145,7 @@ export default function TranslatePage() {
             <div className="flex-grow md:max-w-[calc(100%-25rem)]">
                 <ScrollArea className="h-full">
                     <section className="space-y-4">
-                        <h2 className="text-xl font-semibold text-gray-800">English to Yoruba Translation</h2>
+                        <h2 className="text-xl font-semibold text-gray-800">English to Yorùbá Translation</h2>
                         <div className="relative">
                             <Textarea
                                 placeholder="Enter English text here"
@@ -191,7 +191,7 @@ export default function TranslatePage() {
                         )}
                         {outputText && (
                             <div className="mt-6 bg-white rounded-lg shadow-md p-4 relative">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-800">Yoruba Translation</h3>
+                                <h3 className="text-lg font-semibold mb-2 text-gray-800">Yorùbá Translation</h3>
                                 <p className="text-gray-700">{outputText}</p>
                                 <Button
                                     variant="ghost"

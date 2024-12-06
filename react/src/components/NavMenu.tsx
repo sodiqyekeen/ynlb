@@ -32,7 +32,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isMenuOpen, setIsMenuOpen }) => {
         <nav className="mt-6">
           <NavMenuLink to="/" onClick={() => setIsMenuOpen(false)} label="Home" />
           <NavMenuLink to="/bulk-translation" onClick={() => setIsMenuOpen(false)} label="Bulk Translation" />
-          {/* <NavMenuLink to="/editor" onClick={() => setIsMenuOpen(false)} label="Yoruba Text Editor" /> */}
+          <NavMenuLink to="/editor" onClick={() => setIsMenuOpen(false)} label="Yorùbá Text Editor" />
           <NavMenuLink to="/about" onClick={() => setIsMenuOpen(false)} label="About YNLB" />
           <NavMenuLink to="/contact" onClick={() => setIsMenuOpen(false)} label="Contact Us" />
         </nav>

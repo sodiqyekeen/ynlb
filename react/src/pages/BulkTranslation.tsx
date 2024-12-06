@@ -98,7 +98,7 @@ export default function BulkTranslation() {
 
         worksheet.columns = [
             { header: 'English', key: 'english', width: 50 },
-            { header: 'Yoruba', key: 'yoruba', width: 50 },
+            { header: 'Yorùbá', key: 'yoruba', width: 50 },
         ]
 
         translations.forEach(item => {
@@ -197,7 +197,7 @@ export default function BulkTranslation() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-1/2">English</TableHead>
-                                    <TableHead className="w-1/2">Yoruba</TableHead>
+                                    <TableHead className="w-1/2">Yorùbá</TableHead>
                                     <TableHead>Status</TableHead>
                                     {translations.every(t => t.status === 'completed') && <TableHead>Actions</TableHead>}
                                 </TableRow>

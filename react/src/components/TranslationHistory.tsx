@@ -57,7 +57,7 @@ export function TranslationHistory({ history, onDeleteItem, onClearAll, onSelect
 
         worksheet.columns = [
             { header: 'English', key: 'english', width: 50 },
-            { header: 'Yoruba', key: 'yoruba', width: 50 },
+            { header: 'Yorùbá', key: 'yoruba', width: 50 },
         ]
 
         history.forEach(item => {

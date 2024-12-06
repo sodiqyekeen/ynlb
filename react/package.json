@@ -15,6 +15,7 @@
   "description": "",
   "dependencies": {
     "@huggingface/transformers": "^3.0.2",
+    "@lexical/react": "^0.21.0",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-scroll-area": "^1.2.1",
@@ -22,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "exceljs": "^4.4.0",
+    "lexical": "^0.21.0",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
