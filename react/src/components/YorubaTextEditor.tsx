@@ -1,4 +1,3 @@
-import { $getRoot, $getSelection } from 'lexical';
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Button } from "./ui/Button"
 import { Textarea } from "./ui/TextArea"
@@ -13,12 +12,6 @@ import {
 } from "./ui/Dialog"
 import { X, Copy, Keyboard } from 'lucide-react'
 
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 
 const yorubaCharMap: { [key: string]: string[] } = {
     a: ['a', 'à', 'á'],
@@ -40,12 +33,6 @@ const yorubaCharMap: { [key: string]: string[] } = {
 const unsupportedChars = ['c', 'q', 'v', 'x', 'z'];
 
 export default function YorubaTextEditor() {
-    const initialConfig = {
-        namespace: 'YorubaTextEditor',
-        onError: (error: Error) => {
-            console.error(error.message);
-        }
-    };
     const [text, setText] = useState<string>('');
     const [showVariants, setShowVariants] = useState<{ char: string, position: { x: number, y: number } } | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -254,6 +241,7 @@ export default function YorubaTextEditor() {
                     </Button>
                 )}
             </div>
+
         </div>
     )
 }

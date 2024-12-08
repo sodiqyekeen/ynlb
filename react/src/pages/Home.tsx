@@ -62,8 +62,8 @@ export default function TranslatePage() {
                 case 'done':
                     setProgressItems(prevItems => prevItems.filter(item => item.file !== data.file));
                     break;
-                case 'translating':
-                    setOutputText(data);
+                case 'update':
+                    setOutputText(prev => prev + ' ' + data);
                     break;
                 case 'completed':
                     setOutputText(data);
