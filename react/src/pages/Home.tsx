@@ -9,6 +9,8 @@ import { TranslationItem, TranslationHistory } from '@/components/TranslationHis
 import { v4 as uuid } from 'uuid';
 import { useLocation } from 'react-router-dom';
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export default function TranslatePage() {
     const [inputText, setInputText] = useState<string>('')
     const [outputText, setOutputText] = useState<string>('')
@@ -20,6 +22,8 @@ export default function TranslatePage() {
     const worker = useRef<Worker | null>(null);
     const inputTextRef = useRef<string>('');
     const location = useLocation();
+    const streamingAbortController = useRef<AbortController | null>(null);
+    const remainingTextRef = useRef<string>('');
 
     useEffect(() => {
         if (location.state && location.state.sharedText) {
@@ -48,7 +52,7 @@ export default function TranslatePage() {
             worker.current = new Worker(new URL('../workers/translatorWorker.ts', import.meta.url), { type: 'module' });
         }
 
-        const onmessage = (event: MessageEvent) => {
+        const onmessage = async (event: MessageEvent) => {
             const { type, data } = event.data;
             switch (type) {
                 case 'initiate':
@@ -63,7 +67,28 @@ export default function TranslatePage() {
                     setProgressItems(prevItems => prevItems.filter(item => item.file !== data.file));
                     break;
                 case 'update':
-                    setOutputText(prev => prev + ' ' + data);
+                    if (streamingAbortController.current) {
+                        streamingAbortController.current.abort();
+                        remainingTextRef.current = outputText ? ' ' + data : data;
+                    } else {
+                        remainingTextRef.current = outputText ? remainingTextRef.current + ' ' + data : data;
+                    }
+
+                    streamingAbortController.current = new AbortController();
+                    const signal = streamingAbortController.current.signal;
+
+                    const words = remainingTextRef.current.split('');
+
+                    let newText = '';
+                    for (const char of words) {
+                        if (signal.aborted) {
+                            break;
+                        }
+                        await delay(50);
+                        newText += char;
+                        setOutputText(prev => prev + char);
+                    }
+                    remainingTextRef.current = '';
                     break;
                 case 'completed':
                     setOutputText(data);
@@ -85,7 +110,7 @@ export default function TranslatePage() {
         return () => {
             worker.current?.removeEventListener('message', onmessage);
         };
-    }, []);
+    }, [outputText]);
 
     const handleTranslate = async () => {
         if (!inputText.trim()) {

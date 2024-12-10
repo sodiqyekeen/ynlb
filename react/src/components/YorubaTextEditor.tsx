@@ -67,6 +67,10 @@ export default function YorubaTextEditor() {
             return;
         }
 
+        if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+            return;
+        }
+
         const isUpperCase = e.getModifierState('CapsLock') || e.shiftKey;
         const char = e.altKey ? mapKeyCodeToChar(e.code, isUpperCase) : isUpperCase ? key.toUpperCase() : key;
         if (yorubaCharMap[char]) {
